@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <div class="mb-3">
+    업로더 : <textarea name="uploader">{{ user.username }}</textarea>
+    <br />
+    항목1 점수: <textarea name="description1">{{ form.description1.value|default_if_none:'' }}</textarea>
+    <br />
+    항목2 점수: <textarea name="description2">{{ form.description2.value|default_if_none:'' }}</textarea>
+    <br />
+    항목3 점수: <textarea name="description3">{{ form.description3.value|default_if_none:'' }}</textarea>
+    <br />
+    파일 업로드: <input type="file" name="document" />
+    <br />
+  </div>
+
+  <!-- {{form.as_p}} -->
+  <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+<br />
+
+<p><a href="{% url 'index' %}">Return to home</a></p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h2>Document</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Uploader</th>
+      <th>Description1</th>
+      <th>Description2</th>
+      <th>Description3</th>
+      <th>Document</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for Document in documents %} {% if Document.uploader == user.username %}
+    <tr>
+      <td>{{ Document.uploader }}</td>
+      <td>{{ Document.description1 }}</td>
+      <td>{{ Document.description2 }}</td>
+      <td>{{ Document.description3 }}</td>
+      <td>{{ Document.document }}</td>
+      <td>
+        <a href="{{ Document.document.url }}" class="btn btn-primary btn-sm">Download</a>
+      </td>
+    </tr>
+    {% endif %} {% endfor %}
+  </tbody>
+</table>
+<p><a href="{% url 'index' %}">Return to home</a></p>
+{% endblock %}
