@@ -10,11 +10,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # 메인화면
+    # path('', views.index, name='index'),
     path('', views.index, name='index'),
+    path('board/', views.board, name='board'),
     path('<int:question_id>/', views.detail, name='detail'), #
     path('answer/create/<int:question_id>/', views.answer_create, name='answer_create'), # 
     path('question/create/', views.question_create, name='question_create'),
     path('common/', include('common.urls')),
+    path('diagnosis/', views.diagnosis, name='diagnosis'),
 
     # 질문답변 수정 및 삭제
     path('question/modify/<int:question_id>/', views.question_modify, name='question_modify'),
@@ -34,6 +37,9 @@ urlpatterns = [
     # 다운로드 페이지
     path('download/', views.download, name='download'),
     
+    # 진단 다운로드 페이지
+    path('diagnosis/window', views.winsow_diagnosis, name='window_diagnosis'),
+    path('diagnosis/linux', views.linux_diagnosis, name='linux_diagnosis'),
 ]
 
 if settings.DEBUG:

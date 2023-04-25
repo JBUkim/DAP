@@ -12,7 +12,7 @@ from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 
-def index(request):
+def board(request):
     page = request.GET.get('page', '1')  # 페이지
     question_list = Question.objects.order_by('-create_date')
     paginator = Paginator(question_list, 10)  # 페이지당 10개씩 보여주기
@@ -158,3 +158,15 @@ def model_form_upload(request):
     return render(request, 'model_form_upload.html', {
         'form': form,
     })
+    
+def index(request):
+    return render(request, 'home.html')
+
+def diagnosis(request):
+    return render(request, 'diagnosis.html')
+
+def winsow_diagnosis(request):
+    return render(request, 'window_diagnosis.html')
+
+def linux_diagnosis(request):
+    return render(request, 'linux_diagnosis.html')

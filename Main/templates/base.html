@@ -15,17 +15,19 @@
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
       crossorigin="anonymous"
     ></script>
-    <title>Hello, Main!</title>
+    <link rel="stylesheet" href="{% static './ui.css' %}" />
+    <link rel="shortcut icon" href="../static/fav.ico" />
+    <title>DAP Security</title>
   </head>
   <body>
     <!-- 네비게이션바 -->
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'index' %}">Main</a>
-        <!-- <a class="navbar-brand" href="{% url 'connect' %}">Connect</a>
-        <a class="navbar-brand" href="{% url 'simple_upload' %}">Upload</a> -->
-        <a class="navbar-brand" href="{% url 'model_form_upload' %}">Upload</a>
-        <a class="navbar-brand" href="{% url 'model_form' %}">History</a>
+        <a style="font-size: 1.8rem; color: red" class="navbar-brand" href="{% url 'index' %}">DAP Security</a>
+        <a class="navbar-brand" href="{% url 'diagnosis' %}">취약점 진단</a>
+        <!--라우팅 다시-->
+        <a class="navbar-brand" href="{% url 'board' %}">게시판가기</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -41,14 +43,14 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               {% if user.is_authenticated %}
-              <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+              <a style="font-size: 1.2rem" class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
               {% else %}
-              <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
+              <a style="font-size: 1.2rem" class="nav-link" href="{% url 'common:login' %}">로그인</a>
               {% endif %}
             </li>
             <li>
               {% if not user.is_authenticated %}
-              <a class="nav-link" href="{% url 'common:signup' %}">회원가입</a>
+              <a style="font-size: 1.2rem" class="nav-link" href="{% url 'common:signup' %}">회원가입</a>
               {% endif %}
             </li>
           </ul>
@@ -68,6 +70,19 @@
             location.href = this.dataset.uri;
           }
         });
+      });
+    </script>
+    <script>
+      const left = document.querySelector("#left_side");
+      const right = document.querySelector("#right_side");
+      const os = document.querySelector(".os_text");
+
+      left.addEventListener("mouseover", () => {
+        os.innerText = ".bat파일로 진단을 시작하시겠습니까?";
+      });
+
+      right.addEventListener("mouseover", () => {
+        os.innerText = "Shell파일로 진단을 시작하시겠습니까?";
       });
     </script>
     {% endblock %}
