@@ -25,14 +25,11 @@ urlpatterns = [
     path('answer/modify/<int:answer_id>/', views.answer_modify, name='answer_modify'),
     path('answer/delete/<int:answer_id>/', views.answer_delete, name='answer_delete'),
 
-    # 연결 페이지
-    path('connect/', views.connect, name='connect'), 
-    path('connect_user/', views.connect_user, name='connect_user'),
-
     # 업로드 페이지
     path('simple_upload/', views.simple_upload, name='simple_upload'),
     path('model_form_upload/', views.model_form_upload, name='model_form_upload'),
     path('model_form/', views.model_form, name='model_form'),
+    
 
     # 다운로드 페이지
     path('download/', views.download, name='download'),
@@ -40,6 +37,11 @@ urlpatterns = [
     # 진단 다운로드 페이지
     path('diagnosis/window', views.winsow_diagnosis, name='window_diagnosis'),
     path('diagnosis/linux', views.linux_diagnosis, name='linux_diagnosis'),
+
+    # 스크립트 실행
+    path('connect/', views.connect, name='connect'), 
+    path("run_script/", views.run_script, name="run_script"),
+    path('connect_user/', views.connect_user, name='connect_user'),
 ]
 
 if settings.DEBUG:

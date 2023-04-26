@@ -1,12 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 
 <div>
-  <div>연결 완료</div>
+  <div>스크립트 실행중</div>
   <div>
-    안녕하세요 {{ user.username }}님.<br />
-    루트 아이디는 {{ root_id }}입니다. <br />
-    이메일은 {{ email }} 입니다. <br />
-    IP주소는 {{ ipaddress }} 입니다. <br />
+    안녕하세요 {{ user.username }} 님. 스크립트 진단을 실행중입니다. <br />
+    client_IP: {{ client_IP }} <br />
+    client_name: {{ client_name }} <br />
     동의 여부: {{ agree }} <br />
   </div>
 </div>

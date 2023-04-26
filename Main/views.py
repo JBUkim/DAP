@@ -9,6 +9,9 @@ from django.contrib import messages
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+
+from django.http import HttpResponse
+import subprocess
 # Create your views here.
 
 
@@ -60,15 +63,6 @@ def question_create(request):
         form = QuestionForm()
     context = {'form': form}
     return render(request, 'question_form.html', context)
-
-def connect(request):
-    return render(request, 'connect.html')
-
-def connect_user(request):
-    return render(request, 'connect_user.html', {'user_id':request.POST.get('user_id'), 'root_id':request.POST.get('root_id'),
-    'email':request.POST.get('email'), 'ipaddress':request.POST.get('ipaddress'),
-    'agree':request.POST.get('agree'),})
-
 
 @login_required(login_url='common:login')
 def question_modify(request, question_id):
@@ -170,3 +164,23 @@ def winsow_diagnosis(request):
 
 def linux_diagnosis(request):
     return render(request, 'linux_diagnosis.html')
+
+def run_script(request):
+    subprocess.call(['python', "static/Syne.py"])
+    return HttpResponse('Script executed successfully.')
+
+
+def connect(request):
+    return render(request, 'connect.html')
+
+def connect_user(request):
+    subprocess.call(['python', "static/Syne.py"])
+    context = { 'user_id':request.POST.get('user_id'), 
+                'client_IP':request.POST.get('client_IP'),
+                'client_name':request.POST.get('client_name'), 
+                'client_password':request.POST.get('client_password'),
+                'agree':request.POST.get('agree'),}
+    return render(request, 'connect_user.html', context )
+
+
+
