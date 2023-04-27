@@ -174,13 +174,21 @@ def connect(request):
     return render(request, 'connect.html')
 
 def connect_user(request):
-    subprocess.call(['python', "static/Syne.py"])
-    context = { 'user_id':request.POST.get('user_id'), 
-                'client_IP':request.POST.get('client_IP'),
-                'client_name':request.POST.get('client_name'), 
-                'client_password':request.POST.get('client_password'),
-                'agree':request.POST.get('agree'),}
-    return render(request, 'connect_user.html', context )
+    client_IP = request.POST.get('client_IP')
+    client_name = request.POST.get('client_name')
+    client_password = request.POST.get('client_password')
+
+    subprocess.call(['python', "static/Syne.py", client_IP, client_name, client_password])
+    
+    context = {
+        'user_id': request.POST.get('user_id'),
+        'agree': request.POST.get('agree'),
+        'client_IP': request.POST.get('client_IP'),
+        'client_name': request.POST.get('client_name'),
+        'client_password': request.POST.get('client_password')
+    }
+    
+    return render(request, 'connect_user.html', context)
 
 
 

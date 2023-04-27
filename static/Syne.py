@@ -9,7 +9,7 @@ import os
 import time
 import platform
 import paramiko as paramiko
-import time
+import argparse
 import requests
 
 
@@ -102,12 +102,19 @@ def ssh_execute_script(client_IP, client_name, client_password, remote_base_path
 # 그리고 그에 대한 정보
 
 if __name__ == "__main__":
-    client_IP = '192.168.121.132' # 원격 컴퓨터 IP 정
-    client_name = 'Administrator' # 관리자 아이디
-    client_password = 'Lakion1492' # 관리자 비밀번호
+    parser = argparse.ArgumentParser()
+    parser.add_argument("client_IP", help="원격 컴퓨터 IP 정보")
+    parser.add_argument("client_name", help="관리자 아이디")
+    parser.add_argument("client_password", help="관리자 비밀번호")
+    args = parser.parse_args()
+
+    client_IP = args.client_IP
+    client_name = args.client_name
+    client_password = args.client_password
     remote_base_path = 'C:\\informationSS3\\W1~82'  # 원격 컴퓨터 경로
     local_folder_path = 'C:\\Notion Project\\SSH\\SOLu'  # 원격 컴퓨터에서 복사한 파일을 옮길 로컬 경로
     local_bat_file = 'C:\informationSS2\Windo.bat'  # 원격 컴퓨터에 넣을 점검 파일 경로
+
     ssh_execute_script(client_IP, client_name, client_password, remote_base_path, local_folder_path, local_bat_file)
 
 
