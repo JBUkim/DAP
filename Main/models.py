@@ -28,5 +28,10 @@ class Document(models.Model):
     description1 = models.CharField(max_length=255, blank=True)
     description2 = models.CharField(max_length=255, blank=True)
     description3 = models.CharField(max_length=255, blank=True)
-    document = models.FileField(upload_to='documents/')
+    document = models.FileField(upload_to="documents/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
+class Autoupload(models.Model):
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to="uploads/")

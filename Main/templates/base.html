@@ -26,7 +26,9 @@
       <div class="container-fluid">
         <a style="font-size: 1.8rem; color: red" class="navbar-brand" href="{% url 'index' %}">DAP Security</a>
         <a class="navbar-brand" href="{% url 'diagnosis' %}">취약점 진단</a>
-        <!--라우팅 다시-->
+        <a class="navbar-brand" href="{% url 'model_form_upload' %}">수동</a>
+        <a class="navbar-brand" href="{% url 'model_form' %}">수동확인</a>
+
         <a class="navbar-brand" href="{% url 'board' %}">게시판</a>
         <a class="navbar-brand" href="{% url 'connect' %}">자동진단</a>
         <button

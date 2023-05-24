@@ -1,11 +1,12 @@
 from django.contrib import admin
 
-from .models import Question, Answer, Document
+from .models import Question, Answer, Document, Autoupload
+
 # Register your models here.
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    search_fields = ['subject']
+    search_fields = ["subject"]
 
 
 admin.site.register(Question, QuestionAdmin)
@@ -13,3 +14,5 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 
 admin.site.register(Document)
+
+admin.site.register(Autoupload)

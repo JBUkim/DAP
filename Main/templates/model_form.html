@@ -8,7 +8,9 @@
       <th>점수 2</th>
       <th>점수 3</th>
       <th>파일</th>
+      <th>다운로드</th>
       <th>업로드 날짜</th>
+      <th>삭제</th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +20,10 @@
       <td>{{ Document.description1 }}</td>
       <td>{{ Document.description2 }}</td>
       <td>{{ Document.description3 }}</td>
-      <td>{{ Document.document }} <a href="{{ Document.document.url }}" class="btn btn-primary btn-sm">Download</a></td>
+      <td>{{ Document.document }}</td>
+      <td><a href="{{ Document.document.url }}" class="btn btn-primary btn-sm">Download</a></td>
       <td>{{ Document.uploaded_at }}</td>
+      <td><a href="{% url 'model_form_delete' Document.pk %}" class="btn btn-warning btn-sm">Delete</a></td>
     </tr>
     {% endif %} {% endfor %}
   </tbody>
