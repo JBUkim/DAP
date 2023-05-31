@@ -220,6 +220,7 @@ def connect(request):
 
 
 def upload_report(request):
+    user = request.user
     user_name = request.user.username  # 현재 로그인한 유저의 이름
     date = datetime.datetime.now().strftime("%Y-%m-%d")  # 현재 날짜
     folder_path = os.path.join(settings.MEDIA_ROOT, "newfile", user_name, date)
@@ -244,7 +245,7 @@ def upload_report(request):
     file_obj = File(open(file_path, "rb"))
 
     # 모델 인스턴스를 생성하고 File 객체를 모델 필드에 할당합니다.
-    my_model = Autoupload()
+    my_model = Autoupload(user=user)
     my_model.file.save(file_name, file_obj, save=True)
 
 
@@ -256,6 +257,8 @@ def connect_user(request):
 
         user_name = request.user.username  # 현재 로그인한 유저의 이름
         date = datetime.datetime.now().strftime("%Y-%m-%d")  # 현재 날짜
+
+        form = AutouploadForm(request.POST)
 
         # 폴더 경로를 생성합니다.
         folder_path = os.path.join(settings.MEDIA_ROOT, "newfile", user_name, date)
@@ -278,6 +281,34 @@ def connect_user(request):
             "client_IP": request.POST.get("client_IP"),
             "client_name": request.POST.get("client_name"),
             "client_password": request.POST.get("client_password"),
+            "form": form,
         }
         upload_report(request)
     return render(request, "connect_user.html", context)
+
+
+def connect_list(request):
+    items = Autoupload.objects.all()
+    return render(
+        request,
+        "connect_list.html",
+        {
+            "items": items,
+        },
+    )
+
+
+def connect_list_delete(request, file_id):
+    list_delete = Autoupload.objects.get(pk=file_id)
+    list_delete.file.close()  # 파일 닫기
+    list_delete.file.delete()  # 파일 삭제
+    list_delete.delete()  # 모델 삭제
+
+    # list_delete = Autoupload.objects.get(pk=file_id)
+    # file_path = list_delete.file.path
+    # list_delete.file = None  # 파일 객체 연결 해제
+    # list_delete.save()  # 모델 저장
+
+    # os.remove(file_path)  # 파일 삭제
+    # list_delete.delete()  # 모델 삭제
+    return redirect("connect_list")

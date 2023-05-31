@@ -47,11 +47,7 @@ class DocumentForm(forms.ModelForm):
 class AutouploadForm(forms.ModelForm):
     class Meta:
         model = Autoupload
-        fields = [
-            "title",
-            "file",
-        ]
+        fields = ["user", "file", "create_date"]
         labels = {
-            "title": "제목",
             "file": "파일",
         }

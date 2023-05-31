@@ -157,7 +157,7 @@ if __name__ == "__main__":
     client_password = args.client_password
     remote_base_path = "C:\\informationSS3\\W1~82"  # 원격 컴퓨터 경로
     local_folder_path = Media_path + "\\txt"  # 원격 컴퓨터에서 복사한 파일을 옮길 로컬 경로
-    local_bat_file = "static\\Windo_Main.bat"  # 원격 컴퓨터에 넣을 점검 파일 경로
+    local_bat_file = "static\\Windo_main.bat"  # 원격 컴퓨터에 넣을 점검 파일 경로
 
     ssh_execute_script(
         client_IP,

@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<h2>Autoupload</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>업로더</th>
+      <th>파일</th>
+      <th>다운로드</th>
+      <th>파일 내용</th>
+      <th>업로드 날짜</th>
+      <th>삭제</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for Autoupload in items %} {% load custom_filters %}
+    <tr>
+      <td>{{ Autoupload.user }}</td>
+      <td>{{ Autoupload.file }}</td>
+      <td><a href="{{ Autoupload.file.url }}" class="btn btn-primary btn-sm">Download</a></td>
+      <td><pre>{{ Autoupload.file.read|decode_text:'ANSI' }}</pre></td>
+      <td>{{ Autoupload.create_date }}</td>
+      <td><a href="{% url 'connect_list_delete' Autoupload.pk %}" class="btn btn-warning btn-sm">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

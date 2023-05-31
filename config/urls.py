@@ -44,6 +44,12 @@ urlpatterns = [
     path("connect/", views.connect, name="connect"),
     path("run_script/", views.run_script, name="run_script"),
     path("connect_user/", views.connect_user, name="connect_user"),
+    path("connect_list/", views.connect_list, name="connect_list"),
+    path(
+        "connect_list_delete/<int:file_id>/",
+        views.connect_list_delete,
+        name="connect_list_delete",
+    ),
 ]
 
 if settings.DEBUG:
