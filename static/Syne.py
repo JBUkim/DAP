@@ -1,8 +1,10 @@
 import openpyxl
 from openpyxl.styles import Alignment
+from openpyxl.chart import BarChart, Reference
 from openpyxl.drawing.image import Image
 import win32com
 import win32com.client as win32
+import pandas as pd
 import matplotlib.pyplot as plt
 import subprocess
 import os
@@ -13,9 +15,6 @@ import argparse
 import shutil
 import requests
 from datetime import datetime
-
-import os
-import time
 from django.core.files import File
 
 
@@ -157,7 +156,7 @@ if __name__ == "__main__":
     client_password = args.client_password
     remote_base_path = "C:\\informationSS3\\W1~82"  # 원격 컴퓨터 경로
     local_folder_path = Media_path + "\\txt"  # 원격 컴퓨터에서 복사한 파일을 옮길 로컬 경로
-    local_bat_file = "static\\Windo_main.bat"  # 원격 컴퓨터에 넣을 점검 파일 경로
+    local_bat_file = "static\\Windo.bat"  # 원격 컴퓨터에 넣을 점검 파일 경로
 
     ssh_execute_script(
         client_IP,
@@ -192,156 +191,135 @@ with open(local_folder_path + r"\\Score\\SeScore.txt", "r", encoding="ANSI") as 
     Sescore = int(f.read())
 SescorePer = round((Sescore / 168) * 100, 2)
 
+# 읽어올 report 파일 경로를 선언
+file_path = local_folder_path + r"\\report.txt"
 
-# 사용할 색상 선언
-colors = ["#66b3ff", "#ff9999"]
+# 텍스트의 번호 항목에 맞게 변수를 선언하기 위해 공통적으로 있는 특징
+# [W-?] 이 시작된다는 점을 이용하기 위한 변수
+start_marker = "[W-"
+end_marker = "]"
 
-## 계정 항목 그래프 ##
+# [W-01]부터 [W-81]까지의 변수를 생성할 것이므로 번호 최대 값 선언
+variable_count = 81
 
-# 도넛 그래프 그리기
-fig, ax = plt.subplots()
-ax.pie([AscorePer, 100 - AscorePer], colors=colors, startangle=90)
-# 중앙에 원 그리기
-centre_circle = plt.Circle((0, 0), 0.70, fc="white")
-fig.gca().add_artist(centre_circle)
-# 도넛 구멍에 값 표시
-plt.text(0, 0, f"{AscorePer}%", ha="center", fontsize=25)
-# 원형 유지를 위해 'equal'로 설정
-plt.axis("equal")
-# 그래프를 저장
-plt.savefig(Media_path + r"\\img\\Account_Chart.png")  # 이미지 저장
+# 값을 받아올 구조는 디렉토리 {name : value}
+variable_dict = {}
 
-## 서비스 항목 그래프 ##
-fig2, ax2 = plt.subplots()
-ax2.pie([SscorePer, 100 - SscorePer], colors=colors, startangle=90)
-centre_circle2 = plt.Circle((0, 0), 0.70, fc="white")
-fig2.gca().add_artist(centre_circle2)
-plt.text(0, 0, f"{SscorePer}%", ha="center", fontsize=25)
-plt.axis("equal")
-plt.savefig(Media_path + r"\\img\\Service_Chart.png")
+# report 파일의 내용을 읽어드림
+with open(file_path, "r") as file:
+    text = file.read()
 
-## 패치 항목 그래프 ##
-fig3, ax3 = plt.subplots()
-ax3.pie([PscorePer, 100 - PscorePer], colors=colors, startangle=90)
-centre_circle3 = plt.Circle((0, 0), 0.70, fc="white")
-fig3.gca().add_artist(centre_circle3)
-plt.text(0, 0, f"{PscorePer}%", ha="center", fontsize=25)
-plt.axis("equal")
-plt.savefig(Media_path + r"\\img\\Patch_Chart.png")
+# [W-?] ?는 1부터 시작하므로 햇갈리지 않게 1부터 시작
+for i in range(1, variable_count + 1):
+    # 시작 인덱스는 읽어드린 내용을 기반으로 [W-i]값부터 시작
+    # 여기서 i값의 형태는 01,02...81 같은 형태이므로 zfill(2)를 사용하여 문자열 왼쪽에 10미만의 숫자에 0을 채움
+    # 끝의 인덱스는 i+1를 기준으로 함
+    start_index = text.find(f"{start_marker}{str(i).zfill(2)}]")
+    end_index = text.find(f"{start_marker}{str(i+1).zfill(2)}]")
+    # 만약 끝의 인덱스 값이 위와 같은 규칙으로 할당되지 못한경우
+    # 값이 하나라고 간주하고 시작 값으로 반환
+    if end_index == -1:
+        extracted_text = text[start_index:]
+    else:
+        # 끝의 인덱스 값이 존재한다면, 해당 변수의 값에 시작 인덱스부터 끝 문자열 전까지의 값이 할당
+        extracted_text = text[start_index:end_index]
+    # 받아온 변수 값을 공백을 제거한 후에,
+    # 딕셔너리 형태로 저장하는데, 해당 밸류의 이름은 W{i} 형태로 저장
+    # [W-01] 의 value 값 이름 : W1 이런식으로 저장
+    variable_dict[f"W{i}"] = extracted_text.strip()
 
-## 로그 항목 그래프 ##
-fig4, ax4 = plt.subplots()
-ax4.pie([LscorePer, 100 - LscorePer], colors=colors, startangle=90)
-centre_circle4 = plt.Circle((0, 0), 0.70, fc="white")
-fig4.gca().add_artist(centre_circle4)
-plt.text(0, 0, f"{LscorePer}%", ha="center", fontsize=25)
-plt.axis("equal")
-plt.savefig(Media_path + r"\\img\\Log_Chart.png")
+# 엑셀에 사용할 템플릿과 결과물로 나올 엑셀의 경로 선언
+filet_path1 = "static\Template.xlsx"
+filet_path2 = Media_path + r"\\Solution\\Report.xlsx"
 
-## 서비스 항목 그래프 ##
-fig5, ax5 = plt.subplots()
-ax5.pie([SescorePer, 100 - SescorePer], colors=colors, startangle=90)
-centre_circle5 = plt.Circle((0, 0), 0.70, fc="white")
-fig5.gca().add_artist(centre_circle5)
-plt.text(0, 0, f"{SescorePer}%", ha="center", fontsize=25)
-plt.axis("equal")
-plt.savefig(Media_path + r"\\img\\Secure_Chart.png")
+# 시작셀 지정 및 엑셀의 오프셋 값 선언
+# column의 오프셋 값은 셀의 열의 위치, row 오프셋은 행의 위치를 담당 (가로 / 세로)
+# 이 오프셋값들은 해당 셀의 작업이 끝나고 다음셀로 넘어 갈 때, 이 값들을 참조하여 나아간다
+# 지금 0 / 4 이므로 D22에서 시작하면 D(+0)22(+4) 해서 다음값은 D26이 된다.
+# 단 , 이 설정은 내가 하기 편하도록 설정한 것이므로 참고
+start_cell = "D22"
+column_offset = 0
+row_offset = 4
 
-# Workbook이란 이름의 엑셀파일을 만듬
-wb = openpyxl.Workbook()
+# 해당 경로의 엑셀을 로드하여 활성화 한다.
+wb = openpyxl.load_workbook(filet_path1)
+ws = wb.active
 
-# 파일 이름을 재설정
-new_filename = Media_path + r"\\Solution\\주요통신기반.xlsx"
+# W{i} 순차적으로 셀에다가 값을 삽입하는 과정을 거침
+for i in range(1, 82):
+    variable_name = f"W{i}"
+    # 시작하는 셀은 전에 선언한 D22
+    cell_range = ws[start_cell]
+    # 셀의 값은 W{i} 의 해당 value 값으로 저장
+    cell_range.value = variable_dict[variable_name]
+    # 셀 스타일 형식을 편집한다.
+    # 현재 형식은 세로 / 가로 를 기준으로 가운데 정렬 / 자동 줄 바꿈 허용
+    cell_range.alignment = openpyxl.styles.Alignment(
+        horizontal="center", vertical="center", wrap_text=True
+    )
 
-# 시트 제목을 정함
-wb.active.title = "Report"
+    # 시작 셀의 A1,B2 와 같은 알파벳 중에서 알파벳 문자먼울 가져다가 인덱스로 변환
+    start_cell_col = openpyxl.utils.cell.column_index_from_string(start_cell[:1])
+    # 시작 셀의 열의 행의 값을 가져오고 오프셋 값과 행의 오프셋 값과 합침
+    start_cell_row = int(start_cell[1:]) + row_offset
+    # 시작 셀의 인덱스 값을 다시 반환하여 위의 정의한 행의 규칙 값과 합침
+    start_cell = openpyxl.utils.cell.get_column_letter(start_cell_col) + str(
+        start_cell_row
+    )
 
-# 첫번째 시트를 변수로 쓰기 편하게 지정
-w1 = wb["Report"]
 
-r = 21
+# 처음 그래프의 형태는 전부 0% 선언
+# 값들은 백분율의 형태를 따름
+ws["B8"].number_format = "0.00%"
+ws["B8"].value = AscorePer / 100
 
-file = open(local_folder_path + r"\\report.txt", encoding="ANSI")
-while True:
-    line = file.readline()
-    if not line:
+ws["C8"].number_format = "0.00%"
+ws["C8"].value = SscorePer / 100
+
+ws["D8"].number_format = "0.00%"
+ws["D8"].value = PscorePer / 100
+
+ws["E8"].number_format = "0.00%"
+ws["E8"].value = LscorePer / 100
+
+ws["F8"].number_format = "0.00%"
+ws["F8"].value = SescorePer / 100
+
+# 엑셀의 해당 이름의 차트를 찾아 객체 선언
+# 해당 차트 이름은 Chart1
+chart = None
+for obj in ws._charts:
+    if obj.title == "Chart1":
+        chart = obj
         break
-    if not line.strip():  # 공백 문자열인 경우 continue를 호출하여 다음 루프로 이동
-        continue
-    w1.cell(row=r, column=1).value = line.strip()
-    r = r + 1
-file.close()
 
-# Report 시트의 형식을 미리 지정
-w1.merge_cells("A1:C1")  # Account Score 부분 병합
-w1.cell(row=1, column=1).value = "Account Score"
-w1.cell(row=1, column=1).alignment = Alignment(horizontal="center")  # 가운데 정렬
+if chart is not None:
+    # 데이터 갱신 부분은 2열8행 부터 6열 8행의 값들로 선언
+    data = Reference(ws, min_col=2, min_row=8, max_col=6, max_row=8)
+    # 카테고리는 2열7행 부터 6열 7행 부분들의 값들로 선언
+    categories = Reference(ws, min_col=2, min_row=7, max_col=6, max_row=7)
+    # 정의한 데이터 / 카테고리는 전에 정의한 변수를 참조하여 설정
+    chart.set_categories(categories)
+    chart.add_data(data)
 
-w1.merge_cells("D1:F1")  # Service Score 부분 병합
-w1.cell(row=1, column=4).value = "Service Score"
-w1.cell(row=1, column=4).alignment = Alignment(horizontal="center")  # 가운데 정렬
-
-w1.merge_cells("G1:I1")  # Patch Score 부분 병합
-w1.cell(row=1, column=7).value = "Patch Score"
-w1.cell(row=1, column=7).alignment = Alignment(horizontal="center")  # 가운데 정렬
-
-w1.merge_cells("B9:C9")  # Log Score 부분 병합
-w1.cell(row=9, column=2).value = "Log Score"
-w1.cell(row=9, column=2).alignment = Alignment(horizontal="center")  # 가운데 정렬
-
-w1.merge_cells("F9:G9")  # Secure Score 부분 병합
-w1.cell(row=9, column=6).value = "Secure Score"
-w1.cell(row=9, column=6).alignment = Alignment(horizontal="center")  # 가운데 정렬
-
-
-##계정 항목 이미지##
-
-# 이미지 파일을 엑셀에 삽입하고 크기 설정
-img = Image(Media_path + r"\\img\\Account_Chart.png")
-img.width = 3 * 70  # 가로 크기 설정 (4 셀 = 4*64 픽셀)
-img.height = 9 * 15  # 세로 크기 설정 (9 셀 = 9*15 픽셀)
-w1.add_image(img, "A2")  # A2 셀에 이미지 삽입
-
-## 서비스 항목 이미지 ##
-img2 = Image(Media_path + r"\\img\\Service_Chart.png")
-img2.width = 3 * 70
-img2.height = 9 * 15
-w1.add_image(img2, "D2")
-## 패치 항목 이미지 ##
-img3 = Image(Media_path + r"\\img\\Patch_Chart.png")
-img3.width = 3 * 70
-img3.height = 9 * 15
-w1.add_image(img3, "G2")
-## 로그 항목 이미지 ##
-img4 = Image(Media_path + r"\\img\\Log_Chart.png")
-img4.width = 4 * 70
-img4.height = 14 * 15
-w1.add_image(img4, "A10")
-## 보안 항목 이미지 ##
-img5 = Image(Media_path + r"\\img\\Secure_Chart.png")
-img5.width = 4 * 70
-img5.height = 14 * 15
-w1.add_image(img5, "E10")
+# 해당 경로로 저장하고 엑셀 종료
+wb.save(filet_path2)
+wb.close()
 
 """
-# 페이지 여백 조절
-ws.page_margins.left = 0.1
-ws.page_margins.right = 0.1
-ws.page_margins.top = 0.1
-ws.page_margins.bottom = 0.1
-"""
-
-
-# 엑셀 변경사항 저장
-wb.save(new_filename)
-
 excel = win32com.client.Dispatch("Excel.Application")  # 엑셀 어플리케이션 백그라운드로 실행
-wb = excel.Workbooks.open(Media_path + r"\Solution\주요통신기반.xlsx")  # 엑셀 파일을 읽어드려서 객체로 지정
-ws_Report = wb.Worksheets("Report")
-ws_Report.Select()
-pdf_path = Media_path + r"\Solution\주요통신기반.pdf"
+wb = excel.Workbooks.open(Media_path + r"\Solution\Report.xlsx")  # 엑셀 파일을 읽어드려서 객체로 지정
+pdf_path = Media_path + r"\Solution\Report.pdf"
 wb.ActiveSheet.ExportAsFixedFormat(0, pdf_path)  # 지정했던 경로로 pdf 파일 생성
 wb.Close(False)  # 엑셀 작업을 종료시키고 객체를 시스템에 반환
 excel.Quit()  # 백그라운드로 켜져있는 엑셀을 종료. 이 문구 없으면 백그라운드로 실행되기 때문에 작업관리자 켜서, 엑셀을 직접 꺼야함.
+"""
+
+# Excel 파일을 pandas DataFrame으로 읽어오기
+df = pd.read_excel(Media_path + r"\Solution\Report.xlsx")
+
+# DataFrame을 PDF로 저장하기
+pdf_path = Media_path + "\Solution\Report.pdf"
+df.to_pdf(pdf_path)
 
 print("작업 종료")

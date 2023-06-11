@@ -1,6 +1,19 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+<head>
+  <style>
+    .table {
+      border: 3px solid black;
+      width: 90%;
+    }
 
-<h2>Autoupload</h2>
+    .table,
+    #tex {
+      margin: 10px 20px;
+    }
+  </style>
+</head>
+
+<h2>{{ user.username }}'s AutoUpload File</h2>
 <table class="table">
   <thead>
     <tr>

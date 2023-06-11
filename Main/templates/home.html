@@ -1,148 +1,195 @@
-{% extends 'base.html' %} {% block content %}
-<div
-  class="section"
-  style="background-color: rgb(13, 40, 66); text-align: center"
->
-  <video autoplay muted loop id="player" style="width: 100%">
-    <source src="../static/video.mp4" type="video/mp4" />
-  </video>
-</div>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAP Security</title>
+    <link rel="shortcut icon" href="../static/fav.ico" />
+    {% comment %}
+    <link rel="stylesheet" href="css/style.css" />
+    {% endcomment %}
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .hero {
+        width: 100%;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+      }
 
-<div class="mainName">
-  <div class="main"><h1>DAP Security</h1></div>
-</div>
+      button {
+        color: #fbfcfd;
+        padding: 10px 25px;
+        background: transparent;
+        border: 1px solid #fff;
+        border-radius: 20px;
+        outline: none;
+        cursor: pointer;
+      }
+      .content {
+        color: #fbfcfd;
+        position: absolute;
+        top: 50%;
+        left: 8%;
+        transform: translateY(-50%);
+        z-index: 2;
+      }
+      #btn:hover {
+        background-color: white;
+        color: black;
+      }
+      h1 {
+        font-size: 80px;
+        margin: 10px 0 30px;
+        line-height: 80px;
+      }
+      .side-bar {
+        width: 50px;
+        height: 100vh;
+        background: linear-gradient(#00545d, #000729);
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .menu {
+        display: block;
+        width: 25px;
+        margin: 40px auto 0;
+        cursor: pointer;
+      }
+      .useful-links img {
+        width: 25px;
+        margin: 5px auto;
+        cursor: pointer;
+      }
 
-<section class="section_mid">
-  <div class="sec_left" style="left: 5%">
-    <img src="../static/remote.png" />
-  </div>
-  <p class="sec_right" style="right: -1%">
-    <b>자동진단</b><br /><br />
-    서버의 취약점 진단을 위해 Script를 활용하여 진단을 진행합니다.<br /><br />
-    OS 환경에 맞게 필요한 Script 파일을 다운로드 후 관리자 권한으로 실행하면<br /><br />
-    진단 결과를 확인 가능합니다. 실행 결과 나오는 good, bad, action, log
-    디렉터리를 통해<br /><br />
-    양호, 취약한 항목, 조치방법, 현황을 확인할 수 있습니다. <br /><br />
-    ● 진단 가능 OS - Windows - Windows Server 2012 R2 기반<br />
-    ● Linux - Cent OS 7 기반
-  </p>
-</section>
+      .useful-links {
+        width: 50px;
+        text-align: center;
+        position: absolute;
+        bottom: 30px;
+      }
+      /* side navbar */
+      .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        padding-top: 60px;
+        transition: 0.5s;
+      }
 
-<section class="section_mid2">
-  <p class="sio_left" style="left: 4%">
-    <bs>수동 진단</bs>
-    수동 진단에서 사용한 Script와 동일한 Script로 진단을 진행하기에 신뢰하실 수
-    있습니다.<br />
-    <br />
+      .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
 
-    SSH 연결을 통한 원격 실행을 위해 관리자 권한을 필요로 합니다.<br /><br />
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
 
-    안전한 진단을 위해 관리자 계정의 비밀번호를 변경 후 진단, 다시 변경할 것을
-    권장합니다.<br /><br />
+      .sidenav .closebtn {
+        position: absolute;
+        top: 25px;
+        right: 12px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
 
-    진단 결과를 웹을 통해서 편리하게 한눈에 확인 가능하며, pdf 보고서로 다운로드
-    가능,<br />
-    이전 기록들과 비교 확인 등의 서비스를 제공합니다.<br />
-  </p>
+      #main {
+        transition: margin-left 0.5s;
+        padding: 20px;
+      }
 
-  <div class="sio_right">
-    <img src="../static/manual.jpeg" />
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="text-center text-lg-start bg-light text-muted">
-  <!-- Section: Social media -->
-  <section
-    class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
-  ></section>
-  <!-- Section: Social media -->
-
-  <!-- Section: Links  -->
-  <section class="">
-    <div class="container text-center text-md-start mt-5">
-      <!-- Grid row -->
-      <div class="row mt-3">
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-          <!-- Content -->
-          <h6 class="text-uppercase fw-bold mb-4">
-            <i class="fas fa-gem me-3"></i>DAP Security
-          </h6>
-          <p>
-            중부대학교 정보보호학과 18학번 학생들이 모여<br />
-            주요정보통신기반시설 취약점 진단 가이드에<br />
-            따라 윈도우와 리눅스 서버의 취약점을 원격으로<br />
-            자동 진단하는 사이트를 만들었습니다.
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">Tech</h6>
-          <p>
-            <a href="#!" class="text-reset">Python</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">CSS3</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">DB</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">ETC</a>
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">FrameWork</h6>
-          <p>
-            <a href="#!" class="text-reset">Django</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Bootstrap</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Oracle</a>
-          </p>
-          <p>
-            <a href="#!" class="text-reset">Responsive Web</a>
-          </p>
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <!-- Links -->
-          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-          <p><i class="fas fa-home me-3"></i> Joongbu University, KR</p>
-          <p>
-            <i class="fas fa-envelope me-3"></i>
-            JBU@example.com
-          </p>
-          <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
-          <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
-        </div>
-        <!-- Grid column -->
+      @media screen and (max-height: 450px) {
+        .sidenav {
+          padding-top: 15px;
+        }
+        .sidenav a {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <video id="background-video" autoplay loop muted>
+        <source src="../static/video.mp4" type="video/mp4" />
+      </video>
+      <div class="content">
+        <small>Welcome to our</small>
+        <h1>DAP<br />Security</h1>
       </div>
-      <!-- Grid row -->
-    </div>
-  </section>
-  <!-- Section: Links  -->
+      <div class="side-bar">
+        <a onclick="openNav()"><img src="../static/menu.png" class="menu" /></a>
 
-  <!-- Copyright -->
-  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05)">
-    © 2023 Copyright:
-    <a class="text-reset fw-bold" href="https://mdbootstrap.com/"
-      >DAP Security</a
-    >
-  </div>
-  <!-- Copyright -->
-</footer>
-<!-- Footer -->
-{% endblock %}
+        <div class="useful-links">
+          <a onclick="copyLink()"><img src="../static/share.png" /></a>
+          <a onclick="alert('만든이: 최용준, 김다혁, 원주현, 허현, 이진욱, 김용훈')"><img src="../static/info.png" /></a>
+        </div>
+      </div>
+    </div>
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="{% url 'connect' %}" style="text-decoration: none">취약점진단[자동]</a>
+      <a href="{% url 'connect_list' %}" style="text-decoration: none">취약점진단[자동확인]</a>
+      <a href="{% url 'diagnosis' %}" style="text-decoration: none">취약점진단[수동]</a>
+      <a href="{% url 'model_form_upload' %}" style="text-decoration: none">취약점진단[수동진행]</a>
+      <a href="{% url 'model_form' %}" style="text-decoration: none">취약점진단[수동확인]</a>
+      <a href="{% url 'board' %}" style="text-decoration: none">게시판</a>
+      <li>
+        {% if user.is_authenticated %}
+        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+        {% else %}
+        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:login' %}">로그인</a>
+        {% endif %}
+      </li>
+      <li>
+        {% if not user.is_authenticated %}
+        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:signup' %}">회원가입</a>
+        {% endif %}
+      </li>
+    </div>
+
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "300px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+    <script>
+      function copyLink() {
+        // 현재 링크 가져오기
+        var link = window.location.href;
+
+        // 링크 복사하기
+        var tempInput = document.createElement("input");
+        tempInput.value = link;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+
+        // 메시지 표시
+        alert("링크가 복사되었습니다.");
+      }
+    </script>
+  </body>
+</html>

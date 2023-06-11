@@ -1,5 +1,19 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<h2>Document</h2>
+<head>
+  <style>
+    .table {
+      border: 3px solid black;
+      width: 90%;
+    }
+
+    .table,
+    #tex {
+      margin: 10px 20px;
+    }
+  </style>
+</head>
+
+<h2 id="tex">{{ user.username }}'s Document</h2>
 <table class="table">
   <thead>
     <tr>
@@ -21,9 +35,13 @@
       <td>{{ Document.description2 }}</td>
       <td>{{ Document.description3 }}</td>
       <td>{{ Document.document }}</td>
-      <td><a href="{{ Document.document.url }}" class="btn btn-primary btn-sm">Download</a></td>
+      <td>
+        <a href="{{ Document.document.url }}" class="btn btn-primary btn-sm">Download</a>
+      </td>
       <td>{{ Document.uploaded_at }}</td>
-      <td><a href="{% url 'model_form_delete' Document.pk %}" class="btn btn-warning btn-sm">Delete</a></td>
+      <td>
+        <a href="{% url 'model_form_delete' Document.pk %}" class="btn btn-warning btn-sm">Delete</a>
+      </td>
     </tr>
     {% endif %} {% endfor %}
   </tbody>
