@@ -10,6 +10,10 @@
     #tex {
       margin: 10px 20px;
     }
+
+    h2 {
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -30,10 +34,14 @@
     <tr>
       <td>{{ Autoupload.user }}</td>
       <td>{{ Autoupload.file }}</td>
-      <td><a href="{{ Autoupload.file.url }}" class="btn btn-primary btn-sm">Download</a></td>
+      <td>
+        <a href="{{ Autoupload.file.url }}" class="btn btn-primary btn-sm">Download</a>
+      </td>
       <td><pre>{{ Autoupload.file.read|decode_text:'ANSI' }}</pre></td>
       <td>{{ Autoupload.create_date }}</td>
-      <td><a href="{% url 'connect_list_delete' Autoupload.pk %}" class="btn btn-warning btn-sm">Delete</a></td>
+      <td>
+        <a href="{% url 'connect_list_delete' Autoupload.pk %}" class="btn btn-warning btn-sm">Delete</a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

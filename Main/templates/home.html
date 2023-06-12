@@ -151,18 +151,15 @@
       <a href="{% url 'model_form_upload' %}" style="text-decoration: none">취약점진단[수동진행]</a>
       <a href="{% url 'model_form' %}" style="text-decoration: none">취약점진단[수동확인]</a>
       <a href="{% url 'board' %}" style="text-decoration: none">게시판</a>
-      <li>
-        {% if user.is_authenticated %}
-        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
-        {% else %}
-        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:login' %}">로그인</a>
-        {% endif %}
-      </li>
-      <li>
-        {% if not user.is_authenticated %}
-        <a style="font-size: 1.2rem" style="text-decoration: none" href="{% url 'common:signup' %}">회원가입</a>
-        {% endif %}
-      </li>
+      <br /><br />
+
+      {% if user.is_authenticated %}
+      <a style="font-size: 1.6rem" style="text-decoration: none" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+      {% else %}
+      <a style="font-size: 1.6rem" style="text-decoration: none" href="{% url 'common:login' %}">로그인</a>
+      {% endif %} {% if not user.is_authenticated %}
+      <a style="font-size: 1.6rem" style="text-decoration: none" href="{% url 'common:signup' %}">회원가입</a>
+      {% endif %}
     </div>
 
     <script>
