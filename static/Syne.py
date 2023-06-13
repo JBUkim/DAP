@@ -306,20 +306,4 @@ if chart is not None:
 wb.save(filet_path2)
 wb.close()
 
-"""
-excel = win32com.client.Dispatch("Excel.Application")  # 엑셀 어플리케이션 백그라운드로 실행
-wb = excel.Workbooks.open(Media_path + r"\Solution\Report.xlsx")  # 엑셀 파일을 읽어드려서 객체로 지정
-pdf_path = Media_path + r"\Solution\Report.pdf"
-wb.ActiveSheet.ExportAsFixedFormat(0, pdf_path)  # 지정했던 경로로 pdf 파일 생성
-wb.Close(False)  # 엑셀 작업을 종료시키고 객체를 시스템에 반환
-excel.Quit()  # 백그라운드로 켜져있는 엑셀을 종료. 이 문구 없으면 백그라운드로 실행되기 때문에 작업관리자 켜서, 엑셀을 직접 꺼야함.
-"""
-
-# Excel 파일을 pandas DataFrame으로 읽어오기
-df = pd.read_excel(Media_path + r"\Solution\Report.xlsx")
-
-# DataFrame을 PDF로 저장하기
-pdf_path = Media_path + "\Solution\Report.pdf"
-df.to_pdf(pdf_path)
-
 print("작업 종료")

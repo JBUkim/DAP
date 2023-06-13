@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Question, Answer, Document, Autoupload
+from .models import Question, Answer, Document, Autoupload, UploadFiles
 
 # Register your models here.
 
@@ -16,3 +16,5 @@ admin.site.register(Answer)
 admin.site.register(Document)
 
 admin.site.register(Autoupload)
+
+admin.site.register(UploadFiles)

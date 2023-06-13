@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .models import Question, Answer, Document, Autoupload
+from .models import Question, Answer, Document, Autoupload, UploadFiles
 from .forms import QuestionForm, AnswerForm, DocumentForm, AutouploadForm
 
 from django.utils import timezone
@@ -153,6 +153,7 @@ def download(request):
 # 수동 업로드 & 파일 관리
 
 
+@login_required(login_url="common:login")
 def model_form(request):
     documents = Document.objects.all()
     return render(
@@ -164,6 +165,7 @@ def model_form(request):
     )
 
 
+@login_required(login_url="common:login")
 def model_form_upload(request):
     if request.method == "POST":
         form = DocumentForm(request.POST, request.FILES)
@@ -215,6 +217,7 @@ def run_script(request):
     return HttpResponse("Script executed successfully.")
 
 
+@login_required(login_url="common:login")
 def connect(request):
     return render(request, "connect.html")
 
@@ -287,6 +290,7 @@ def connect_user(request):
     return render(request, "connect_user.html", context)
 
 
+@login_required(login_url="common:login")
 def connect_list(request):
     items = Autoupload.objects.all()
     return render(
@@ -300,15 +304,24 @@ def connect_list(request):
 
 def connect_list_delete(request, file_id):
     list_delete = Autoupload.objects.get(pk=file_id)
-    list_delete.file.close()  # 파일 닫기
-    list_delete.file.delete()  # 파일 삭제
+
+    # Close the File object and delete the file.
+    list_delete.file.close()
+    file_path = os.path.join(settings.MEDIA_ROOT, list_delete.file.name)
+
+    try:
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+    except PermissionError as e:
+        print(f"Error: {e}")
+
+    # Sleep for 3 seconds before attempting to delete the model.
+    time.sleep(3)
     list_delete.delete()  # 모델 삭제
 
-    # list_delete = Autoupload.objects.get(pk=file_id)
-    # file_path = list_delete.file.path
-    # list_delete.file = None  # 파일 객체 연결 해제
-    # list_delete.save()  # 모델 저장
-
-    # os.remove(file_path)  # 파일 삭제
-    # list_delete.delete()  # 모델 삭제
     return redirect("connect_list")
+
+
+def pyqt5(request):
+    items = UploadFiles.objects.all()
+    return render(request, "pyqt5.html", {"items": items})

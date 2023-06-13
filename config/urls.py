@@ -50,6 +50,7 @@ urlpatterns = [
         views.connect_list_delete,
         name="connect_list_delete",
     ),
+    path("pyqt5/", views.pyqt5, name="pyqt5"),
 ]
 
 if settings.DEBUG:

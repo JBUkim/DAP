@@ -33,6 +33,21 @@ class Document(models.Model):
 
 
 class Autoupload(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100)
     file = models.FileField(upload_to="uploads/")
     create_date = models.DateTimeField(null=True, blank=True)
+
+
+class UploadFiles(models.Model):
+    email = models.EmailField()
+    txt_file = models.FileField()
+    xlsx_file = models.FileField()
+    created_at = models.DateTimeField()
+    AscorePer = models.DecimalField(max_digits=5, decimal_places=2)
+    SscorePer = models.DecimalField(max_digits=5, decimal_places=2)
+    PscorePer = models.DecimalField(max_digits=5, decimal_places=2)
+    LscorePer = models.DecimalField(max_digits=5, decimal_places=2)
+    SescorePer = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        db_table = "upload_files"

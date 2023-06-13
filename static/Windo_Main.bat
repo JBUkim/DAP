@@ -48,19 +48,6 @@ SET SecureScore=0
 SET SecureScore2=0
 SET SecureScore3=0
 
-echo 			                        [W-01] ~ [W-82]까지의 항목을 점검합니다. >>  W1~82\report.txt
-echo. >>  W1~82\report.txt
-echo Windows Server 2012 R2를 기준으로 제작된 코드입니다. >>  W1~82\report.txt
-echo 이하 버전에 대해서는 점검이 정상진행 되지 않을 수 있습니다. >>  W1~82\report.txt
-echo bad항목에서 번호 뒤에 S가 붙는 항목은 담당자와 상의하여 직접 점검해야하는 항목입니다. >>  W1~82\report.txt
-echo bad항목에서 번호 뒤에 SS가 붙으면 Windows Server 2012 이하 버전에서만 해당하기에  >>  W1~82\report.txt
-echo 직접 점검해야 하는 항목입니다. >>  W1~82\report.txt
-echo ------------------------------------------------------------------------------- >>  W1~82\report.txt
-
-echo. >>  W1~82\report.txt
-
-echo. >>  W1~82\report.txt
-
 echo [W-01]\t Administrator 계정 이름 변경 >> W1~82\report.txt
 echo. >>  W1~82\report.txt
 

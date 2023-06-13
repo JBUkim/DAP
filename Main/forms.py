@@ -48,6 +48,4 @@ class AutouploadForm(forms.ModelForm):
     class Meta:
         model = Autoupload
         fields = ["user", "file", "create_date"]
-        labels = {
-            "file": "파일",
-        }
+        labels = {"user": "유저", "file": "파일", "create_date": "날짜"}

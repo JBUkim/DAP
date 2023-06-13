@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block content %}
+<head>
+  <style>
+    .table {
+      border: 3px solid black;
+      width: 90%;
+    }
+
+    .table,
+    #tex {
+      margin: 10px 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<h2>{{ user.username }}'s Pyqt5 Score</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>AscorePer</th>
+      <th>SscorePer</th>
+      <th>PscorePer</th>
+      <th>LscorePer</th>
+      <th>SescorePer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for Pyqt5 in items %}
+    <tr>
+      <td>{{ Pyqt5.email }}</td>
+      <td>{{ Pyqt5.AscorePer }}</td>
+      <td>{{ Pyqt5.SscorePer }}</td>
+      <td>{{ Pyqt5.PscorePer }}</td>
+      <td>{{ Pyqt5.LscorePer }}</td>
+      <td>{{ Pyqt5.SescorePer }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
