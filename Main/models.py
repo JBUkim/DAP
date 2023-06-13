@@ -39,9 +39,10 @@ class Autoupload(models.Model):
 
 
 class UploadFiles(models.Model):
-    email = models.EmailField()
-    txt_file = models.FileField()
-    xlsx_file = models.FileField()
+    _id = models.AutoField(primary_key=True)
+    email = models.CharField(max_length=100)
+    txt_file = models.FileField(upload_to="uploads/")
+    xlsx_file = models.FileField(upload_to="uploads/")
     created_at = models.DateTimeField()
     AscorePer = models.DecimalField(max_digits=5, decimal_places=2)
     SscorePer = models.DecimalField(max_digits=5, decimal_places=2)
